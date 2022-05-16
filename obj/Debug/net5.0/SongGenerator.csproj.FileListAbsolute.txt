@@ -1,0 +1,16 @@
+C:\Users\jakub\Desktop\Task\SongGenerator\obj\Debug\net5.0\SongGenerator.csproj.AssemblyReference.cache
+C:\Users\jakub\Desktop\Task\SongGenerator\obj\Debug\net5.0\SongGenerator.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jakub\Desktop\Task\SongGenerator\obj\Debug\net5.0\SongGenerator.AssemblyInfoInputs.cache
+C:\Users\jakub\Desktop\Task\SongGenerator\obj\Debug\net5.0\SongGenerator.AssemblyInfo.cs
+C:\Users\jakub\Desktop\Task\SongGenerator\obj\Debug\net5.0\SongGenerator.csproj.CoreCompileInputs.cache
+C:\Users\jakub\Desktop\Task\SongGenerator\bin\Debug\net5.0\SongGenerator.exe
+C:\Users\jakub\Desktop\Task\SongGenerator\bin\Debug\net5.0\SongGenerator.deps.json
+C:\Users\jakub\Desktop\Task\SongGenerator\bin\Debug\net5.0\SongGenerator.runtimeconfig.json
+C:\Users\jakub\Desktop\Task\SongGenerator\bin\Debug\net5.0\SongGenerator.runtimeconfig.dev.json
+C:\Users\jakub\Desktop\Task\SongGenerator\bin\Debug\net5.0\SongGenerator.dll
+C:\Users\jakub\Desktop\Task\SongGenerator\bin\Debug\net5.0\SongGenerator.pdb
+C:\Users\jakub\Desktop\Task\SongGenerator\obj\Debug\net5.0\SongGenerator.dll
+C:\Users\jakub\Desktop\Task\SongGenerator\obj\Debug\net5.0\refint\SongGenerator.dll
+C:\Users\jakub\Desktop\Task\SongGenerator\obj\Debug\net5.0\SongGenerator.pdb
+C:\Users\jakub\Desktop\Task\SongGenerator\obj\Debug\net5.0\SongGenerator.genruntimeconfig.cache
+C:\Users\jakub\Desktop\Task\SongGenerator\obj\Debug\net5.0\ref\SongGenerator.dll
