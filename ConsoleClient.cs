@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace SongGenerator
 {
@@ -20,8 +21,17 @@ namespace SongGenerator
         {
             int input = ManageInput();
             var generator = new RandomWordClient();
-            var results = await generator.GetRandomWord(input);
-            PrintOuput(results);
+            var results = (await generator.GetRandomWord(input)).OrderBy(x => x).ToArray();
+            
+
+            var songRequest = new SongClient();
+            var songInfo = new (string, string)[results.Length];
+            for(int i = 0; i < results.Length; i++)
+            {
+                songInfo[i] = await songRequest.Run(results[i]);
+                Thread.Sleep(1000);
+            }
+            PrintOuput(results, songInfo);
         }
 
         private int ManageInput()
@@ -53,11 +63,30 @@ namespace SongGenerator
             }
         }
 
-        private void PrintOuput(string[] results)
+        private void PrintOuput(string[] results, (string title, string artist)[] songInfo)
         {
-            foreach (var result in results)
+            for(int i = 0; i < results.Length; i++)
             {
-                Console.WriteLine(result);
+                Console.Write("Random word is: ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(results[i]);
+                if (songInfo[i].artist != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write(" Found release title ");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write(songInfo[i].title);
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write(" mady by ");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine(songInfo[i].artist);
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(" No recording found!");
+                }
+                Console.ForegroundColor = ConsoleColor.White;
             }
         }
     }

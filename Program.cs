@@ -15,6 +15,8 @@ namespace SongGenerator
         {
             var client = new ConsoleClient(5, 20);
             await client.Run();
+            //var songClient = new SongClient();
+            //await songClient.Search("LAST");
         }
     }
 }

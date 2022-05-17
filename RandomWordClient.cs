@@ -17,6 +17,7 @@ namespace SongGenerator
             client = new HttpClient();
         }
 
+        
         public async Task<string[]> GetRandomWord(int n)
         {
             Task<string>[] taskList = new Task<string>[n];
@@ -31,11 +32,20 @@ namespace SongGenerator
         private void ExtractOnlyWord(ref string[] rawData)
         {
             var control = new char[] { '[', ']' };
+            Dictionary<string, string> dict = new Dictionary<string, string>(); 
             for (int i = 0; i < rawData.Length; i++)
             {
                 rawData[i] = rawData[i].Trim(control);
-                var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(rawData[i]);
+                try
+                {
+                    dict = JsonSerializer.Deserialize<Dictionary<string, string>>(rawData[i]);
+                }
+                catch (Exception _)
+                {
+                    continue;
+                }
                 rawData[i] = dict["word"];
+                dict.Clear();
             }
         }
     }
