@@ -23,8 +23,25 @@ namespace SongGenerator
         public async Task Run()
         {
             int input = ManageInput();
-            var (words, songs) = await client.Run(input);
-            
+            string[] words;
+            (string, string)[] songs;
+            try
+            {
+                 (words, songs) = await client.Run(input);
+            }
+            catch(System.Net.Http.HttpRequestException)
+            {
+                Console.WriteLine("Either you don't have internet connection, API host is currently unavailable or host denied the connection");
+                return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Something failed!");
+                Console.WriteLine(ex.Message);
+                return;
+            }
+
+
             PrintOuput(words, songs);
             
             // prevents app from exiting immediately after running
@@ -77,7 +94,7 @@ namespace SongGenerator
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.Write(songInfo[i].title);
                     Console.ForegroundColor = ConsoleColor.White;
-                    Console.Write(" mady by ");
+                    Console.Write(" made by ");
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine(songInfo[i].artist);
                 }

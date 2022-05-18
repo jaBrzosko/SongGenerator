@@ -17,6 +17,7 @@ namespace SongGenerator
         {
             // Loading app settings on startup
             var (lower, upper, sleep, word, song) = LoadConfig();
+        
             // possibility of future implementation of GUI Client
             var client = new ConsoleClient(lower, upper, sleep, word, song);
             await client.Run();
