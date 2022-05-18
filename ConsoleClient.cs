@@ -73,7 +73,7 @@ namespace SongGenerator
                 if (songInfo[i].artist != null)
                 {
                     Console.ForegroundColor = ConsoleColor.White;
-                    Console.Write(" Found release title ");
+                    Console.Write(" Found title ");
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.Write(songInfo[i].title);
                     Console.ForegroundColor = ConsoleColor.White;
