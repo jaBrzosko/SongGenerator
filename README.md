@@ -23,3 +23,5 @@ Next type following commands:
 
 Now either find SongRequest.exe in bin folder or try to type:
 ./bin/Release/net5.0/SongGenerator.exe
+
+When app is open you just have to type how many song you want to request
