@@ -26,6 +26,9 @@ namespace SongGenerator
             var (words, songs) = await client.Run(input);
             
             PrintOuput(words, songs);
+            
+            // prevents app from exiting immediately after running
+            Console.ReadLine();
         }
 
         // validating input to be between lower bound and upper bound

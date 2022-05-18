@@ -75,7 +75,7 @@ namespace SongGenerator
                 {
                     dict = JsonSerializer.Deserialize<Dictionary<string, string>>(rawData[i]);
                 }
-                catch (Exception _)
+                catch (Exception)
                 {
                     continue;
                 }
