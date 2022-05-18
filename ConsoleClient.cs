@@ -20,18 +20,10 @@ namespace SongGenerator
         public async Task Run()
         {
             int input = ManageInput();
-            var generator = new RandomWordClient();
-            var results = (await generator.GetRandomWord(input)).OrderBy(x => x).ToArray();
+            var client = new GeneralClient();
+            var (words, songs) = await client.Run(input);
             
-
-            var songRequest = new SongClient();
-            var songInfo = new (string, string)[results.Length];
-            for(int i = 0; i < results.Length; i++)
-            {
-                songInfo[i] = await songRequest.Run(results[i]);
-                Thread.Sleep(1000);
-            }
-            PrintOuput(results, songInfo);
+            PrintOuput(words, songs);
         }
 
         private int ManageInput()

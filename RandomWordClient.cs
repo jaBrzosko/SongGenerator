@@ -17,8 +17,33 @@ namespace SongGenerator
             client = new HttpClient();
         }
 
-        
-        public async Task<string[]> GetRandomWord(int n)
+        public async Task<string[]> GetRandomDistinctWord(int n)
+        {
+            int count = n;
+            List<string> words = new List<string>();
+            while(count > 0)
+            {
+                var results = await GetRandomWord(count);
+                var trimmed = GetOnlyDifferentWords(results);
+                count -= trimmed.Count;
+                words.AddRange(trimmed);
+            }
+            return words.ToArray();
+        }
+
+        private List<string> GetOnlyDifferentWords(string[] table)
+        {
+            List<string> words = new List<string>();
+            foreach (string word in table)
+            {
+                if (words.Contains(word) || word.StartsWith("\""))
+                    continue;
+                words.Add(word);
+            }
+            return words;
+        }
+
+        private async Task<string[]> GetRandomWord(int n)
         {
             Task<string>[] taskList = new Task<string>[n];
             for(int i = 0; i < n; i++)
