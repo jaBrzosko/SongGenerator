@@ -19,6 +19,7 @@ namespace SongGenerator
             client = new GeneralClient(wordLink, songLink, sleep);
         }
 
+        // main entry point to client
         public async Task Run()
         {
             int input = ManageInput();
@@ -27,6 +28,7 @@ namespace SongGenerator
             PrintOuput(words, songs);
         }
 
+        // validating input to be between lower bound and upper bound
         private int ManageInput()
         {
             Console.Write("Number of words to return: ");
@@ -56,6 +58,7 @@ namespace SongGenerator
             }
         }
 
+        // predetermined style to print API responses to console
         private void PrintOuput(string[] results, (string title, string artist)[] songInfo)
         {
             for(int i = 0; i < results.Length; i++)

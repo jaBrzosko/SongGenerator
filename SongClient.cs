@@ -9,6 +9,7 @@ using System.Threading;
 
 namespace SongGenerator
 {
+    // class used to connecting to MusicBrainz API
     class SongClient
     {
         private readonly HttpClient client;
@@ -22,54 +23,76 @@ namespace SongGenerator
             client.DefaultRequestHeaders.UserAgent.ParseAdd("SongRequest/1.0.1 (Warsaw)");
         }
 
+        // main run entry point
         public async Task<(string, string)[]> Run(string[] inputs)
         {
-            var songInfo = new (string, string)[inputs.Length];
+            var songResponse = new Task<string>[inputs.Length];
             for (int i = 0; i < inputs.Length; i++)
             {
-                songInfo[i] = await GetOne(inputs[i]);
+                // API calls are made asynchronously, but app still have to sleep after making a call
+                songResponse[i] = MakeApiCall(inputs[i]);
+                // MusicBrainz requests that you don't make more than one request per second, therefore
+                // you have to artificially slow down program not to get blacklisted by said API
                 Thread.Sleep(sleepTime);
             }
-            return songInfo;
+            // only after making all calls they are synchronized and parsed
+            var results = await Task.WhenAll(songResponse);
+
+            return ParseApiResponse(results);
         }
-        private async Task<(string, string)> GetOne(string name)
+
+        //make single API call
+        private Task<string> MakeApiCall(string name)
         {
             string url = $"{_url}{name}&limit=1&fmt=json";
-            string result;
             try
             {
-                 result = await client.GetStringAsync(url);
+                return client.GetStringAsync(url);
             }
             catch (Exception)
             {
-                return (null, null);
+                return null;
             }
-            Dictionary<string, object> dict = new Dictionary<string, object>();
+        }
 
-            try
+        // parse MusicBrainz API response to expected string format
+        private (string, string)[] ParseApiResponse(string[] responses)
+        {
+            var output = new (string, string)[responses.Length];
+            for(int i = 0; i < responses.Length; i++)
             {
-                dict = JsonSerializer.Deserialize<Dictionary<string, object>>(result);
+                Dictionary<string, object> dict = new Dictionary<string, object>();
+
+                try
+                {
+                    dict = JsonSerializer.Deserialize<Dictionary<string, object>>(responses[i]);
+                }
+                catch (Exception)
+                {
+                    output[i] = (null, null);
+                    continue;
+                }
+                if (dict["count"].ToString() == "0")
+                {
+                    output[i] = (null, null);
+                    continue;
+                }
+                try
+                {
+                    var control = new char[] { '[', ']' };
+                    JsonElement releases = (JsonElement)dict["releases"];
+                    var rel = JsonSerializer.Deserialize<Dictionary<string, object>>((releases.ToString()).Trim(control));
+                    var artist = JsonSerializer.Deserialize<Dictionary<string, object>>((rel["artist-credit"].ToString()).Trim(control));
+                    output[i] = (rel["title"].ToString(), (string)artist["name"].ToString());
+                    continue;
+                }
+                catch (Exception)
+                {
+                    output[i] = (null, null);
+                    continue;
+                }
             }
-            catch (Exception)
-            {
-                return (null, null);
-            }
-            if(dict["count"].ToString() == "0")
-            {
-                return (null, null);
-            }
-            try
-            {
-                var control = new char[] { '[', ']' };
-                JsonElement releases = (JsonElement)dict["releases"];
-                var rel = JsonSerializer.Deserialize<Dictionary<string, object>>((releases.ToString()).Trim(control));
-                var artist = JsonSerializer.Deserialize<Dictionary<string, object>>((rel["artist-credit"].ToString()).Trim(control));
-                return (rel["title"].ToString(), (string)artist["name"].ToString());
-            }
-            catch (Exception)
-            {
-                return (null, null);
-            }
+            return output;
         }
     }
 }

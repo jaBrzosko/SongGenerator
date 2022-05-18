@@ -15,11 +15,14 @@ namespace SongGenerator
     {
         static async Task Main(string[] args)
         {
+            // Loading app settings on startup
             var (lower, upper, sleep, word, song) = LoadConfig();
+            // possibility of future implementation of GUI Client
             var client = new ConsoleClient(lower, upper, sleep, word, song);
             await client.Run();
         }
 
+        // function loads settings
         private static (int, int, int, string, string) LoadConfig()
         {
             int lower, upper, sleep;
