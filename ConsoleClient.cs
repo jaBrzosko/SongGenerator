@@ -31,6 +31,7 @@ namespace SongGenerator
             }
             catch(System.Net.Http.HttpRequestException)
             {
+                // Https connection has failed
                 Console.WriteLine("Either you don't have internet connection, API host is currently unavailable or host denied the connection");
                 return;
             }
