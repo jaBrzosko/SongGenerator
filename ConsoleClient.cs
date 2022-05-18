@@ -11,16 +11,17 @@ namespace SongGenerator
     {
         private readonly int lower;
         private readonly int upper;
-        public ConsoleClient(int lowerBoundary, int upperBoundary)
+        private readonly GeneralClient client;
+        public ConsoleClient(int lowerBoundary, int upperBoundary, int sleep, string wordLink, string songLink)
         {
             lower = lowerBoundary;
             upper = upperBoundary;
+            client = new GeneralClient(wordLink, songLink, sleep);
         }
 
         public async Task Run()
         {
             int input = ManageInput();
-            var client = new GeneralClient();
             var (words, songs) = await client.Run(input);
             
             PrintOuput(words, songs);
@@ -59,13 +60,14 @@ namespace SongGenerator
         {
             for(int i = 0; i < results.Length; i++)
             {
+                Console.WriteLine();
                 Console.Write("Random word is: ");
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write(results[i]);
+                Console.WriteLine(results[i]);
                 if (songInfo[i].artist != null)
                 {
                     Console.ForegroundColor = ConsoleColor.White;
-                    Console.Write(" Found title ");
+                    Console.Write("Found title ");
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.Write(songInfo[i].title);
                     Console.ForegroundColor = ConsoleColor.White;
@@ -76,7 +78,7 @@ namespace SongGenerator
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(" No recording found!");
+                    Console.WriteLine("No recording found!");
                 }
                 Console.ForegroundColor = ConsoleColor.White;
             }

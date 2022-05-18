@@ -12,27 +12,38 @@ namespace SongGenerator
     class SongClient
     {
         private readonly HttpClient client;
-        public SongClient()
+        private readonly string _url;
+        private readonly int sleepTime;
+        public SongClient(string link, int sleep)
         {
+            sleepTime = sleep;
+            _url = link;
             client = new HttpClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("SongRequest/0.0.1 (Warsaw)");
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("SongRequest/1.0.1 (Warsaw)");
         }
 
         public async Task<(string, string)[]> Run(string[] inputs)
         {
-            var songClient = new SongClient();
             var songInfo = new (string, string)[inputs.Length];
             for (int i = 0; i < inputs.Length; i++)
             {
-                songInfo[i] = await songClient.GetOne(inputs[i]);
-                Thread.Sleep(1000);
+                songInfo[i] = await GetOne(inputs[i]);
+                Thread.Sleep(sleepTime);
             }
             return songInfo;
         }
         private async Task<(string, string)> GetOne(string name)
         {
-            string url = $"https://musicbrainz.org/ws/2/release?query={name}&limit=1&fmt=json";
-            var result = await client.GetStringAsync(url);
+            string url = $"{_url}{name}&limit=1&fmt=json";
+            string result;
+            try
+            {
+                 result = await client.GetStringAsync(url);
+            }
+            catch (Exception)
+            {
+                return (null, null);
+            }
             Dictionary<string, object> dict = new Dictionary<string, object>();
 
             try

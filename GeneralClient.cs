@@ -10,10 +10,10 @@ namespace SongGenerator
     {
         private RandomWordClient _randomWordClient;
         private SongClient _songClient;
-        public GeneralClient()
+        public GeneralClient(string wordLink, string songLink, int sleep)
         {
-            _randomWordClient = new RandomWordClient();
-            _songClient = new SongClient();
+            _randomWordClient = new RandomWordClient(wordLink);
+            _songClient = new SongClient(songLink, sleep);
         }
         public async Task<(string[], (string, string)[])> Run(int n)
         {

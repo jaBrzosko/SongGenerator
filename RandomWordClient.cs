@@ -11,10 +11,12 @@ namespace SongGenerator
 {
     class RandomWordClient
     {
+        private readonly string _url;
         private readonly HttpClient client;
-        public RandomWordClient()
+        public RandomWordClient(string link)
         {
             client = new HttpClient();
+            _url = link;
         }
 
         public async Task<string[]> GetRandomDistinctWord(int n)
@@ -48,7 +50,7 @@ namespace SongGenerator
             Task<string>[] taskList = new Task<string>[n];
             for(int i = 0; i < n; i++)
             {
-                taskList[i] = client.GetStringAsync("https://random-words-api.vercel.app/word");
+                taskList[i] = client.GetStringAsync(_url);
             }
             var results = await Task.WhenAll(taskList);
             ExtractOnlyWord(ref results);
